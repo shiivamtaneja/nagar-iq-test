@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can read and write their own user document
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Reports can be read by anyone, written by authenticated users
+    match /reports/{reportId} {
+      allow read: if true; // Public read access for transparency
+      allow write: if request.auth != null;
+      allow update: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         request.auth.token.role == 'admin');
+    }
+    
+    // News can be read by anyone, written only by admins/system
+    match /news/{newsId} {
+      allow read: if true; // Public read access
+      allow write: if request.auth != null && 
+        (request.auth.token.role == 'admin' || 
+         request.auth.token.role == 'system');
+    }
+    
+    // Report logs can be read by report owner and admins
+    match /reportLogs/{logId} {
+      allow read: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         request.auth.token.role == 'admin');
+      allow write: if request.auth != null;
+    }
+    
+    // Admin-only collections
+    match /admin/{document=**} {
+      allow read, write: if request.auth != null && 
+        request.auth.token.role == 'admin';
+    }
+    
+    // Default deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

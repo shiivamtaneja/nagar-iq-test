@@ -1,0 +1,29 @@
+{
+  "name": "nagariq-backend",
+  "version": "1.0.0",
+  "description": "NagarIQ Backend - Firebase Cloud Functions for city monitoring app",
+  "main": "index.js",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["firebase", "functions", "city-monitoring", "smart-city"],
+  "author": "NagarIQ Team",
+  "license": "MIT",
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^4.5.0",
+    "axios": "^1.6.0",
+    "node-cron": "^3.0.2"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "engines": {
+    "node": "18"
+  }
+}
